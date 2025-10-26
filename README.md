@@ -4,7 +4,7 @@
 
 1. Find the sum of two polynomials using arrays.
 2. Find the sum of two sparse matrices and transpose the resultant matrix.
-3. Convert infix expression to postfix (or prefix) and then evaluate using stack.
+3. Convert infix expression to postfix and then evaluate using stack.
 4. Implement Queue, DEQUEUE, and Circular Queue using arrays.
 5. Implement Circular Queue using arrays.
 6. Implement backward and forward navigation of visited web pages in a web browser (i.e. back and forward buttons) using doubly linked list operations.
