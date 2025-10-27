@@ -7,7 +7,7 @@ int front = -1, rear = -1;
 void enqueue(int x) {
     if (rear == MAX - 1) {
         printf("Queue Overflow!\n");
-        return;
+        return;        
     }
     if (front == -1) front = 0;
     queue[++rear] = x;
