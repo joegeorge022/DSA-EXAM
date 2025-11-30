@@ -4,9 +4,9 @@
 
 ## Experiment List
 
-- [ ] 1. Find the sum of two polynomials using arrays.
+- [x] 1. Find the sum of two polynomials using arrays.
 
-- [ ] 2. Find the sum of two sparse matrices and transpose the resultant matrix.
+- [x] 2. Find the sum of two sparse matrices and transpose the resultant matrix.
 
 - [ ] 3. Convert infix expression to postfix (or prefix) and then evaluate using stack.
 
