@@ -30,4 +30,4 @@
 
 - [ ] 13. Simulation of a basic memory allocator and garbage collector using doubly linked list.
 
-- [ ] 14. You are given a hash table with 10 slots (indexed from 0 to 9). You are also provided with a set of integers that need to be inserted into the hash table using a hash function.
+- [x] 14. You are given a hash table with 10 slots (indexed from 0 to 9). You are also provided with a set of integers that need to be inserted into the hash table using a hash function.
