@@ -2,115 +2,95 @@
 #include <stdlib.h>
 
 struct Term {
-    int coeff, expo;
-    struct Term* next;
+    int coeff;
+    int expo;
+    struct Term *next;
 };
 
-struct Term* insert(struct Term* poly, int c, int e) {
-    struct Term* newNode = malloc(sizeof(struct Term));
+struct Term* insertAtEnd(struct Term* head, int c, int e) {
+    struct Term* newNode = (struct Term*)malloc(sizeof(struct Term));
     newNode->coeff = c;
     newNode->expo = e;
     newNode->next = NULL;
-    
-    if (poly == NULL || e > poly->expo) {
-        newNode->next = poly;
+
+    if(head == NULL)
         return newNode;
-    }
-    
-    struct Term* temp = poly;
-    while (temp->next != NULL && temp->next->expo >= e) {
+
+    // Traverse to end of list
+    struct Term* temp = head;
+    while(temp->next != NULL)
         temp = temp->next;
-    }
-    newNode->next = temp->next;
+
     temp->next = newNode;
-    
-    return poly;
+    return head;
 }
 
-struct Term* create() {
-    struct Term* poly = NULL;
-    int n, c, e;
-    
-    printf("Enter number of terms: ");
-    scanf("%d", &n);
-    
-    for (int i = 0; i < n; i++) {
-        printf("Term %d (coeff expo): ", i + 1);
-        scanf("%d %d", &c, &e);
-        poly = insert(poly, c, e);
+struct Term* createPolynomial(int degree, int sumdegree) {
+    struct Term* head = NULL;
+    int coeff;
+
+    for(int i = sumdegree; i >= 0; i--) {
+        if(i > degree) {
+            coeff = 0;
+        } else {
+            printf("Enter coefficient of x^%d: ", i);
+            scanf("%d", &coeff);
+        }
+        head = insertAtEnd(head, coeff, i);
     }
-    
-    return poly;
+    return head;
 }
 
-void display(struct Term* poly) {
-    if (poly == NULL) {
-        printf("Empty\n");
-        return;
+struct Term* addPolynomials(struct Term* p1, struct Term* p2) {
+    struct Term* sum = NULL;
+
+    while(p1 != NULL && p2 != NULL) {
+        sum = insertAtEnd(sum, p1->coeff + p2->coeff, p1->expo);
+        p1 = p1->next;
+        p2 = p2->next;
     }
-    
-    while (poly != NULL) {
-        printf("%dX^%d", poly->coeff, poly->expo);
-        if (poly->next != NULL) printf(" + ");
-        poly = poly->next;
+    return sum;
+}
+
+void display(struct Term* head) {
+    struct Term* temp = head;
+    while(temp != NULL) {
+        printf("%dx^%d", temp->coeff, temp->expo);
+        if(temp->next != NULL)
+            printf(" + ");
+        temp = temp->next;
     }
     printf("\n");
 }
 
-struct Term* add(struct Term* p1, struct Term* p2) {
-    struct Term* result = NULL;
-    
-    while (p1 != NULL && p2 != NULL) {
-        if (p1->expo == p2->expo) {
-            int sum = p1->coeff + p2->coeff;
-            if (sum != 0) {
-                result = insert(result, sum, p1->expo);
-            }
-            p1 = p1->next;
-            p2 = p2->next;
-        }
-        else if (p1->expo > p2->expo) {
-            result = insert(result, p1->coeff, p1->expo);
-            p1 = p1->next;
-        }
-        else {
-            result = insert(result, p2->coeff, p2->expo);
-            p2 = p2->next;
-        }
-    }
-    
-    while (p1 != NULL) {
-        result = insert(result, p1->coeff, p1->expo);
-        p1 = p1->next;
-    }
-    
-    while (p2 != NULL) {
-        result = insert(result, p2->coeff, p2->expo);
-        p2 = p2->next;
-    }
-    
-    return result;
-}
-
 int main() {
-    struct Term *p1 = NULL, *p2 = NULL, *result = NULL;
-    
-    printf("First Polynomial:\n");
-    p1 = create();
-    
-    printf("\nSecond Polynomial:\n");
-    p2 = create();
-    
-    result = add(p1, p2);
-    
-    printf("\nP1: ");
+    int deg1, deg2, sumdeg;
+    struct Term *p1 = NULL, *p2 = NULL, *res = NULL;
+
+    printf("Enter max degree of 1st polynomial: ");
+    scanf("%d", &deg1);
+
+    printf("Enter max degree of 2nd polynomial: ");
+    scanf("%d", &deg2);
+
+    sumdeg = (deg1 > deg2) ? deg1 : deg2;
+
+    printf("\nEnter 1st Polynomial:\n");
+    p1 = createPolynomial(deg1, sumdeg);
+
+    printf("\nEnter 2nd Polynomial:\n");
+    p2 = createPolynomial(deg2, sumdeg);
+
+    res = addPolynomials(p1, p2);
+
+    printf("\nP1  = ");
     display(p1);
-    
-    printf("P2: ");
+
+    printf("P2  = ");
     display(p2);
-    
-    printf("Sum: ");
-    display(result);
-    
+
+    printf("Sum = ");
+    display(res);
+
     return 0;
 }

@@ -1,68 +1,55 @@
 #include <stdio.h>
-#include <string.h>
-#define MAX 100
 
-int queue[MAX], front = 0, rear = 0;
+#define MAX 20
+
+int queue[MAX], front = -1, rear = -1;
 int visited[MAX];
-char vertices[MAX][10];
 
-void enqueue(int value) {
-    queue[rear++] = value;
+void enqueue(int v) {
+    if(front == -1)front = 0;
+    queue[++rear] = v;
 }
 
 int dequeue() {
-    return queue[front++]; 
-}
-
-int getIndex(char name[], int n) {
-    for (int i = 0; i < n; i++)
-        if (strcmp(vertices[i], name) == 0) 
-            return i;
-    return -1;
-}
-
-void bfs(int adj[MAX][MAX], int start, int n) {
-    enqueue(start);
-    visited[start] = 1;
-    printf("\nBFS: ");
-    while (front < rear) {
-        int current = dequeue();
-        printf("%s ", vertices[current]);
-        for (int i = 0; i < n; i++)
-            if (adj[current][i] == 1 && !visited[i]) {
-                enqueue(i);
-                visited[i] = 1;
-            }
-    }
-    printf("\n");
+    return queue[front++];
 }
 
 int main() {
-    int n, adj[MAX][MAX];
-
-    char startName[10];
-    printf("Number of vertices: ");
-    scanf("%d", &n);
-
-    printf("Vertex names: ");
-    for (int i = 0; i < n; i++)
-        scanf("%s", vertices[i]);
-
-    printf("\nAdjacency matrix:\n");
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
-            scanf("%d", &adj[i][j]);
-
-    printf("\nStart vertex: ");
-    scanf("%s", startName);
+    int adj[MAX][MAX];
+    int vertices, start, i, j;
     
-    int startIndex = getIndex(startName, n);
-    if (startIndex == -1) {
-        printf("Invalid vertex!\n");
-        return 0;
+    printf("Enter number of vertices: ");
+    scanf("%d", &vertices);
+    
+    printf("Enter adjacency matrix:\n");
+    for(i = 0; i < vertices; i++) {
+        for(j = 0; j < vertices; j++) {
+            scanf("%d", &adj[i][j]);
+        }
     }
-    for (int i = 0; i < n; i++)
+    
+    printf("Enter starting vertex (0 to %d): ", vertices - 1);
+    scanf("%d", &start);
+    
+    for(i = 0; i < vertices; i++) {
         visited[i] = 0;
-    bfs(adj, startIndex, n);
+    }
+
+    enqueue(start);
+    visited[start] = 1;
+    
+    printf("BFS Traversal: ");
+    
+    while(front <= rear) {
+        int v = dequeue();
+        printf("%d ", v);
+        
+        for(i = 0; i < vertices; i++) {
+            if(adj[v][i] == 1 && visited[i] == 0) {
+                enqueue(i);
+                visited[i] = 1;
+            }
+        }
+    }
     return 0;
 }
