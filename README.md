@@ -22,7 +22,7 @@
 
 - [ ] 9. Implement binary search trees by performing insertion, search, and deletion of numbers using linked list.
 
-- [ ] 10. Implement BFS using arrays.
+- [x] 10. Implement BFS using arrays.
 
 - [ ] 11. Given an array of sorted items, implement an efficient algorithm to search for a specific item in the array and also find the time and space complexities.
 
