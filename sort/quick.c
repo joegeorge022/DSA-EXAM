@@ -1,48 +1,49 @@
-#include<stdio.h>
-void quicksort(int array[25],int first,int last){
-   int i, j, pivot, temp;
+// C program to implement Quick Sort Algorithm
+#include <stdio.h>
 
-   if(first<last){
-      pivot=first;
-      i=first;
-      j=last;
-
-      while(i<j){
-         while(array[i]<=array[pivot]&&i<last)
-            i++;
-         while(array[j]>array[pivot])
-            j--;
-         if(i<j){
-            temp=array[i];
-            array[i]=array[j];
-            array[j]=temp;
-         }
-      }
-
-      temp=array[pivot];
-      array[pivot]=array[j];
-      array[j]=temp;
-      quicksort(array,first,j-1);
-      quicksort(array,j+1,last);
-
-   }
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
-int main(){
-   int i, n, array[25];
+int partition(int arr[], int low, int high) {
+    int p = arr[low];
+    int i = low;
+    int j = high;
 
-   printf("How many elements are u going to enter?: ");
-   scanf("%d",&n);
-
-   printf("Enter %d elements: ", n);
-   for(i=0;i<n;i++){
-      scanf("%d",&array[i]);
+    while (i < j) {
+        while (arr[i] <= p && i <= high - 1) {
+            i++;
+        }
+        while (arr[j] > p && j >= low + 1) {
+            j--;
+        }
+        if (i < j) {
+            swap(&arr[i], &arr[j]);
+        }
     }
-    quicksort(array,0,n-1);
+    swap(&arr[low], &arr[j]);
+    return j;
+}
 
-   printf("Order of Sorted elements: ");
-   for(i=0;i<n;i++)
-      printf(" %d",array[i]);
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
 
-   return 0;
+int main() {
+  
+    int arr[] = { 4, 2, 5, 3, 1 };
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    quickSort(arr, 0, n - 1);
+
+    for (int i = 0; i < n; i++)
+        printf("%d ", arr[i]);
+
+    return 0;
 }
