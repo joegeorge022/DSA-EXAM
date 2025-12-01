@@ -16,7 +16,7 @@
 
 - [x] 6. Implement backward and forward navigation of visited web pages in a web browser (i.e. back and forward buttons) using doubly linked list operations.
 
-- [ ] 7. Implement addition of polynomials using singly linked lists.
+- [x] 7. Implement addition of polynomials using singly linked lists.
 
 - [ ] 8. Create a binary tree for a given simple arithmetic expression and find the prefix / postfix equivalent.
 

@@ -11,10 +11,10 @@ int main() {
     int n1, n2, coeff, expo;
     Polynomial *poly1 = NULL, *poly2 = NULL, *result = NULL;
     Polynomial *temp = NULL, *ptr = NULL;
-    
+
+    // Read first polynomial
     printf("Enter number of terms in first polynomial: ");
     scanf("%d", &n1);
-
     printf("Enter coeff and expo for first polynomial:\n");
     for (int i = 0; i < n1; i++) {
         scanf("%d %d", &coeff, &expo);
@@ -33,6 +33,7 @@ int main() {
         }
     }
 
+    // Read second polynomial
     printf("Enter number of terms in second polynomial: ");
     scanf("%d", &n2);
 
@@ -56,6 +57,7 @@ int main() {
 
     Polynomial *p1 = poly1, *p2 = poly2;
 
+    //Add Polynomials
     while (p1 != NULL && p2 != NULL) {
         temp = (Polynomial *)malloc(sizeof(Polynomial));
         temp->next = NULL;
