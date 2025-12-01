@@ -1,96 +1,134 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Term {
+typedef struct Polynomial {
     int coeff;
     int expo;
-    struct Term *next;
-};
-
-struct Term* insertAtEnd(struct Term* head, int c, int e) {
-    struct Term* newNode = (struct Term*)malloc(sizeof(struct Term));
-    newNode->coeff = c;
-    newNode->expo = e;
-    newNode->next = NULL;
-
-    if(head == NULL)
-        return newNode;
-
-    // Traverse to end of list
-    struct Term* temp = head;
-    while(temp->next != NULL)
-        temp = temp->next;
-
-    temp->next = newNode;
-    return head;
-}
-
-struct Term* createPolynomial(int degree, int sumdegree) {
-    struct Term* head = NULL;
-    int coeff;
-
-    for(int i = sumdegree; i >= 0; i--) {
-        if(i > degree) {
-            coeff = 0;
-        } else {
-            printf("Enter coefficient of x^%d: ", i);
-            scanf("%d", &coeff);
-        }
-        head = insertAtEnd(head, coeff, i);
-    }
-    return head;
-}
-
-struct Term* addPolynomials(struct Term* p1, struct Term* p2) {
-    struct Term* sum = NULL;
-
-    while(p1 != NULL && p2 != NULL) {
-        sum = insertAtEnd(sum, p1->coeff + p2->coeff, p1->expo);
-        p1 = p1->next;
-        p2 = p2->next;
-    }
-    return sum;
-}
-
-void display(struct Term* head) {
-    struct Term* temp = head;
-    while(temp != NULL) {
-        printf("%dx^%d", temp->coeff, temp->expo);
-        if(temp->next != NULL)
-            printf(" + ");
-        temp = temp->next;
-    }
-    printf("\n");
-}
+    struct Polynomial *next;
+} Polynomial;
 
 int main() {
-    int deg1, deg2, sumdeg;
-    struct Term *p1 = NULL, *p2 = NULL, *res = NULL;
+    int n1, n2, coeff, expo;
+    Polynomial *poly1 = NULL, *poly2 = NULL, *result = NULL;
+    Polynomial *temp = NULL, *ptr = NULL;
+    
+    printf("Enter number of terms in first polynomial: ");
+    scanf("%d", &n1);
 
-    printf("Enter max degree of 1st polynomial: ");
-    scanf("%d", &deg1);
+    printf("Enter coeff and expo for first polynomial:\n");
+    for (int i = 0; i < n1; i++) {
+        scanf("%d %d", &coeff, &expo);
+        temp = (Polynomial *)malloc(sizeof(Polynomial));
+        temp->coeff = coeff;
+        temp->expo = expo;
+        temp->next = NULL;
 
-    printf("Enter max degree of 2nd polynomial: ");
-    scanf("%d", &deg2);
+        if (poly1 == NULL)
+            poly1 = temp;
+        else {
+            ptr = poly1;
+            while (ptr->next != NULL)
+                ptr = ptr->next;
+            ptr->next = temp;
+        }
+    }
 
-    sumdeg = (deg1 > deg2) ? deg1 : deg2;
+    printf("Enter number of terms in second polynomial: ");
+    scanf("%d", &n2);
 
-    printf("\nEnter 1st Polynomial:\n");
-    p1 = createPolynomial(deg1, sumdeg);
+    printf("Enter coeff and expo for second polynomial:\n");
+    for (int i = 0; i < n2; i++) {
+        scanf("%d %d", &coeff, &expo);
+        temp = (Polynomial *)malloc(sizeof(Polynomial));
+        temp->coeff = coeff;
+        temp->expo = expo;
+        temp->next = NULL;
 
-    printf("\nEnter 2nd Polynomial:\n");
-    p2 = createPolynomial(deg2, sumdeg);
+        if (poly2 == NULL)
+            poly2 = temp;
+        else {
+            ptr = poly2;
+            while (ptr->next != NULL)
+                ptr = ptr->next;
+            ptr->next = temp;
+        }
+    }
 
-    res = addPolynomials(p1, p2);
+    Polynomial *p1 = poly1, *p2 = poly2;
 
-    printf("\nP1  = ");
-    display(p1);
+    while (p1 != NULL && p2 != NULL) {
+        temp = (Polynomial *)malloc(sizeof(Polynomial));
+        temp->next = NULL;
 
-    printf("P2  = ");
-    display(p2);
+        if (p1->expo == p2->expo) {
+            temp->expo = p1->expo;
+            temp->coeff = p1->coeff + p2->coeff;
+            p1 = p1->next;
+            p2 = p2->next;
+        }
+        else if (p1->expo > p2->expo) {
+            temp->expo = p1->expo;
+            temp->coeff = p1->coeff;
+            p1 = p1->next;
+        }
+        else {
+            temp->expo = p2->expo;
+            temp->coeff = p2->coeff;
+            p2 = p2->next;
+        }
 
-    printf("Sum = ");
-    display(res);
+        if (result == NULL)
+            result = temp;
+        else {
+            ptr = result;
+            while (ptr->next != NULL)
+                ptr = ptr->next;
+            ptr->next = temp;
+        }
+    }
+
+    while (p1 != NULL) {
+        temp = (Polynomial *)malloc(sizeof(Polynomial));
+        temp->coeff = p1->coeff;
+        temp->expo = p1->expo;
+        temp->next = NULL;
+
+        if (result == NULL)
+            result = temp;
+        else {
+            ptr = result;
+            while (ptr->next != NULL)
+                ptr = ptr->next;
+            ptr->next = temp;
+        }
+        p1 = p1->next;
+    }
+
+    while (p2 != NULL) {
+        temp = (Polynomial *)malloc(sizeof(Polynomial));
+        temp->coeff = p2->coeff;
+        temp->expo = p2->expo;
+        temp->next = NULL;
+
+        if (result == NULL)
+            result = temp;
+        else {
+            ptr = result;
+            while (ptr->next != NULL)
+                ptr = ptr->next;
+            ptr->next = temp;
+        }
+        p2 = p2->next;
+    }
+
+    printf("Sum:\n");
+    ptr = result;
+    while (ptr != NULL) {
+        printf("%dx^%d", ptr->coeff, ptr->expo);
+        ptr = ptr->next;
+        if (ptr != NULL)
+            printf(" + ");
+    }
 
     return 0;
 }

@@ -1,120 +1,103 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#define MAX 100
+int main() {
+    char infix[100], postfix[200], stack[100];
+    int top = -1, j = 0;
 
-char stack[MAX];
-int top = -1;
+    scanf("%s", infix);
 
-int stackInt[MAX];
-int topInt = -1;
+    for (int i = 0; infix[i] != '\0'; i++) {
+        char ch = infix[i];
 
-void push(char c) {
-    stack[++top] = c;
-}
-
-char pop() {
-    return stack[top--];
-}
-
-char peek() {
-    if (top == -1) return '\0';
-    return stack[top];
-}
-
-void pushInt(int x) {
-    stackInt[++topInt] = x;
-}
-
-int popInt() {
-    return stackInt[topInt--];
-}
-
-int precedence(char op) {
-    if (op == '+' || op == '-') return 1;
-    if (op == '*' || op == '/') return 2;
-    return 0;
-}
-
-int isOperator(char c) {
-    return (c == '+' || c == '-' || c == '*' || c == '/');
-}
-
-void infixToPostfix(char infix[], char postfix[]) {
-    int i = 0, k = 0;
-    char c;
-
-    while ((c = infix[i]) != '\0') {
-        if (isdigit(c)) {
-            postfix[k++] = c;
+        if (isalpha(ch)) {
+            postfix[j++] = ch;
+            postfix[j++] = ' ';
         }
-        else if (c == '(') {
-            push(c);
-        }
-        else if (c == ')') {
-            while (top != -1 && peek() != '(') {
-                postfix[k++] = pop();
+        else if (isdigit(ch)) {
+            while (isdigit(infix[i])) {
+                postfix[j++] = infix[i++];
             }
-            pop();
+            postfix[j++] = ' ';
+            i--;
         }
-        else if (isOperator(c)) {
-            while (top != -1 && precedence(peek()) >= precedence(c)) {
-                postfix[k++] = pop();
+        else if (ch == '(') {
+            stack[++top] = ch;
+        }
+        else if (ch == ')') {
+            while (top != -1 && stack[top] != '(') {
+                postfix[j++] = stack[top--];
+                postfix[j++] = ' ';
             }
-            push(c);
+            top--;
         }
-        i++;
+        else {
+            int p1;
+            if (ch == '+' || ch == '-') p1 = 1;
+            else if (ch == '*' || ch == '/') p1 = 2;
+            else if (ch == '^') p1 = 3;
+            else p1 = 0;
+
+            while (top != -1) {
+                char op = stack[top];
+                int p2;
+                if (op == '+' || op == '-') p2 = 1;
+                else if (op == '*' || op == '/') p2 = 2;
+                else if (op == '^') p2 = 3;
+                else p2 = 0;
+
+                if (p2 > p1 || (p2 == p1 && ch != '^')) {
+                    postfix[j++] = stack[top--];
+                    postfix[j++] = ' ';
+                } else break;
+            }
+            stack[++top] = ch;
+        }
     }
 
     while (top != -1) {
-        postfix[k++] = pop();
+        postfix[j++] = stack[top--];
+        postfix[j++] = ' ';
     }
 
-    postfix[k] = '\0';
-}
+    postfix[j] = '\0';
+    printf("%s\n", postfix);
 
-int evaluatePostfix(char postfix[]) {
-    int i = 0;
-    char c;
+    int eval[100], etop = -1;
+    for (int i = 0; postfix[i] != '\0'; i++) {
+        char ch = postfix[i];
 
-    while ((c = postfix[i]) != '\0') {
-        if (isdigit(c)) {
-            pushInt(c - '0');
-        }
-        else if (isOperator(c)) {
-            int b = popInt();
-            int a = popInt();
-            int res;
+        if (ch == ' ') continue;
 
-            switch (c) {
-                case '+': res = a + b; break;
-                case '-': res = a - b; break;
-                case '*': res = a * b; break;
-                case '/': res = a / b; break;
+        if (isdigit(ch)) {
+            int num = 0;
+            while (isdigit(postfix[i])) {
+                num = num * 10 + (postfix[i] - '0');
+                i++;
             }
-
-            pushInt(res);
+            eval[++etop] = num;
+            i--;
         }
-        i++;
+        else if (isalpha(ch)) {
+            printf("Cannot evaluate expression containing variables\n");
+            return 0;
+        }
+        else {
+            int b = eval[etop--];
+            int a = eval[etop--];
+            int r;
+            if (ch == '+') r = a + b;
+            else if (ch == '-') r = a - b;
+            else if (ch == '*') r = a * b;
+            else if (ch == '/') r = a / b;
+            else if (ch == '^') {
+                r = 1;
+                for (int k = 0; k < b; k++) r *= a;
+            }
+            eval[++etop] = r;
+        }
     }
 
-    return popInt();
-}
-
-int main() {
-    char infix[MAX], postfix[MAX];
-    int result;
-
-    printf("Enter infix expression (no spaces, single digit operands): ");
-    scanf("%s", infix);
-
-    infixToPostfix(infix, postfix);
-
-    printf("Infix  : %s\n", infix);
-    printf("Postfix: %s\n", postfix);
-
-    result = evaluatePostfix(postfix);
-
-    printf("Result : %d\n", result);
-    
+    printf("%d\n", eval[etop]);
+    return 0;
 }
