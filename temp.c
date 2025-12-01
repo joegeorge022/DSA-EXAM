@@ -1,54 +1,77 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#define MAX 20
+struct Node{
+    char url[100];
+    struct Node *prev, *next;
+};
 
-int queue[MAX],front=-1,rear=-1;
-int visited[MAX];
+struct Node *current = NULL;
 
-void enqueue(int value){
-    if (front==-1) front = 0;
-    queue[++rear] = value;
+void visit(char *url){
+    struct Node *newpage = (struct Node*)malloc(sizeof(struct Node));
+    strcpy(newpage->url,url);
+    newpage->prev=current;
+    newpage->next=NULL;
+
+    if(current){
+        struct Node *temp=current->next;
+        while (temp){
+            struct Node *del=temp;
+            temp=temp->next;
+            free(del);  
+        }
+        current->next=newpage;
+    }
+    current=newpage;
+    printf("Visited: %s\n",url);
 }
 
-int dequeue(){
-    return queue[front++];
+void back(){
+    if(current && current->prev){
+        current=current->prev;
+        printf("Went back to %s\n",current->url);
+    } else {
+        printf("Nothing to go back to!\n");
+    }
+}
+
+void forward(){
+    if(current && current->next){
+        current=current->next;
+        printf("Went forward to %s\n",current->url);
+    } else {
+        printf("Nothing to go forward to\n");
+    }
 }
 
 int main(){
-    int vertices,i,j,start;
-    int adj[MAX][MAX];
-
-    printf("Enter no of vertices: ");
-    scanf("%d",&vertices);
-
-    for(int i=0;i<vertices;i++){
-        visited[i]=0;
-    }
-
-    printf("Enter adjacency matrix: ");
-    for(int i=0;i<vertices;i++){
-        for (int j = 0; j < vertices; j++){
-            scanf("%d",&adj[i][j]);
-        }  
-    }
-
-    printf("Enter starting vertex(0 to %d): ",vertices-1);
-    scanf("%d",&start);
-
-    enqueue(start);
-    visited[start]=1;
-
-    printf("BFS TRAVERSAL: ");
-    while(front<=rear){
-        int v = dequeue();
-        printf("%d",v);
-        for(int i=0;i<vertices;i++){
-            if(visited[i]==0 && adj[v][i]==1){
-                enqueue(i);
-                visited[i]=1;
-            }
+    int choice;
+    char url[100];
+    while(1){
+        printf(" \n 1.Visit \n 2.Back \n 3.Forward \n 4.Exit \n Enter a choice: ");
+        scanf("%d",&choice);
+        switch (choice){
+        case 1: 
+            printf("Enter url: ");
+            scanf("%s",url);
+            visit(url);
+            break;
+        case 2:
+            back();
+            break;
+        case 3:
+            forward();
+            break;
+        case 4:
+            return 0;
+            break;
+        default:
+            printf("Invalid Choice!\n");
+            break;
         }
+        
     }
-
-    
+    return 0;
 }

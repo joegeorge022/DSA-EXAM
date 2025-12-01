@@ -14,7 +14,7 @@
 
 - [ ] 5. Implement Circular Queue using arrays.
 
-- [ ] 6. Implement backward and forward navigation of visited web pages in a web browser (i.e. back and forward buttons) using doubly linked list operations.
+- [x] 6. Implement backward and forward navigation of visited web pages in a web browser (i.e. back and forward buttons) using doubly linked list operations.
 
 - [ ] 7. Implement addition of polynomials using singly linked lists.
 
