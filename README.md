@@ -10,7 +10,7 @@
 
 - [ ] 3. Convert infix expression to postfix (or prefix) and then evaluate using stack.
 
-- [ ] 4. Implement Queue, DEQUEUE, and Circular Queue using arrays.
+- [x] 4. Implement Queue, DEQUEUE, and Circular Queue using arrays.
 
 - [ ] 5. Implement Circular Queue using arrays.
 
