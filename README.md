@@ -12,7 +12,7 @@
 
 - [x] 4. Implement Queue, DEQUEUE, and Circular Queue using arrays.
 
-- [ ] 5. Implement Circular Queue using arrays.
+- [x] 5. Implement Circular Queue using arrays.
 
 - [x] 6. Implement backward and forward navigation of visited web pages in a web browser (i.e. back and forward buttons) using doubly linked list operations.
 
@@ -24,7 +24,7 @@
 
 - [x] 10. Implement BFS using arrays.
 
-- [ ] 11. Given an array of sorted items, implement an efficient algorithm to search for a specific item in the array and also find the time and space complexities.
+- [x] 11. Given an array of sorted items, implement an efficient algorithm to search for a specific item in the array and also find the time and space complexities.
 
 - [ ] 12. Implement Bubble Sort, Insertion Sort, Quick Sort, and Merge Sort and compare the number of steps involved.
 
