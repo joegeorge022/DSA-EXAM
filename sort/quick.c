@@ -1,4 +1,3 @@
-// C program to implement Quick Sort Algorithm
 #include <stdio.h>
 
 void swap(int* a, int* b) {
